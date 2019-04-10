@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <!-- 读取配置文件(方法2):db.properties -->
+    <!--<util:properties id="dbconf" location="classpath:conf/db.properties" />-->
+    <!-- 数据库连接池 -->
+    <!-- 单数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="maxActive" value="10" />
+        <property name="minIdle" value="5" />
+    </bean>
+
+
+    <!-- 配置SqlSessionFactoryBean;用来代替MyBatis的主配置文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 注入连接资源 -->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 注入映射文件 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <!-- Mybatis主配置文件 -->
+        <property name="configLocation" value="classpath:spring/mybatis-config.xml"/>
+    </bean>
+    <!-- 配置MapperScannerConfigurer -->
+    <!-- 需要调用的时候写id 即:可能会调用getbean的时候, Spring容器自己使用则不需要写id-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 注入映射器所在的包名 -->
+        <property name="basePackage" value="cn.acyou.aries.mappers"/>
+        <!-- 如果你使 用了一个 以上的 DataSource ,那 么自动 装配可 能会失效 。 -->
+        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+        <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"/>
+    </bean>
+
+    <!-- 配置SqlSessionTemplate -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" index="0" ref="sqlSessionFactory" />
+    </bean>
+    <!--配置组件扫描-->
+    <context:component-scan base-package="cn.acyou.aries.mappers"/>
+
+    <!--手动注入Bean示例：-->
+    <!--
+        <bean id="tbossMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+            <property name="mapperInterface" value="cn.acyou.iblog.mappers.TBossMapper" />
+            <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+        </bean>
+    -->
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 如果使用注解的方式，需要配置tx:annotation-driven -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    <!-- 通过AOP配置提供事务增强，让service包下所有Bean的所有方法拥有事务 -->
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="serviceMethod" expression="execution(public *  cn.acyou.aries.service..*(..))"/>
+        <aop:advisor order="1" pointcut-ref="serviceMethod" advice-ref="txAdvice"/>
+    </aop:config>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true" propagation="SUPPORTS"
+                       timeout="20"/>
+            <tx:method name="get*" read-only="true" propagation="SUPPORTS"
+                       timeout="20"/>
+            <tx:method name="select*" read-only="true" propagation="SUPPORTS"
+                       timeout="20"/>
+            <tx:method name="list*" read-only="true" propagation="SUPPORTS"
+                       timeout="50"/>
+            <tx:method name="add*" read-only="false" rollback-for="java.lang.Exception"
+                       timeout="100"/>
+        </tx:attributes>
+    </tx:advice>
+
+</beans>

@@ -13,6 +13,12 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>aries-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--Spring aop/beans/context/core/expression-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -63,6 +69,14 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
         </dependency>
 
         <dependency>

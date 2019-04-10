@@ -24,7 +24,7 @@
     <!-- 集中定义依赖版本号 -->
     <properties>
         <junit.version>4.12</junit.version>
-        <spring.version>3.2.8.RELEASE</spring.version>
+        <spring.version>4.1.7.RELEASE</spring.version>
         <mybatis.version>3.2.8</mybatis.version>
         <mybatis.spring.version>1.2.3</mybatis.spring.version>
         <mybatis.paginator.version>1.2.15</mybatis.paginator.version>
@@ -332,6 +332,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+    </dependencies>
 
 
 
