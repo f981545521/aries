@@ -36,4 +36,6 @@
     <!-- 增加MVC注解扫描 -->
     <mvc:annotation-driven/>
 
+    <import resource="mongoDB.xml"/>
+
 </beans>

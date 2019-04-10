@@ -56,6 +56,7 @@
         <jedis.version>2.7.3</jedis.version>
         <jsch.version>0.1.54</jsch.version>
         <spring.data.redis.version>1.6.2.RELEASE</spring.data.redis.version>
+        <spring.mongodb.version>1.5.0.RELEASE</spring.mongodb.version>
     </properties>
     <!--只定义依赖的版本，并不实际依赖 ; 工程中并不会下载这里的依赖-->
     <dependencyManagement>
@@ -329,6 +330,12 @@
                 <groupId>com.jcraft</groupId>
                 <artifactId>jsch</artifactId>
                 <version>${jsch.version}</version>
+            </dependency>
+            <!-- spring mongodb -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring.mongodb.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
