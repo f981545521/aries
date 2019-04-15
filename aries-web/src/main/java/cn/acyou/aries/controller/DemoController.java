@@ -1,12 +1,14 @@
 package cn.acyou.aries.controller;
 
+import cn.acyou.aries.IdListSo;
 import cn.acyou.aries.service.BossService;
 import cn.acyou.aries.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 /**
  * @author youfang
@@ -21,8 +23,20 @@ public class DemoController {
 
     @RequestMapping(value = "/all", method = {RequestMethod.GET})
     @ResponseBody
-    public JsonResult dynamicSource(){
+    public JsonResult all(){
         return new JsonResult(bossService.getAllBoss());
+    }
+    @RequestMapping(value = "/delete", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public JsonResult delete(IdListSo so){
+        System.out.println(String.join(",", so.getIds()));
+        return new JsonResult(so);
+    }
+    @RequestMapping(value = "/delete2", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public JsonResult delete2(@RequestBody List<String> ids){
+        System.out.println(String.join(",", ids));
+        return new JsonResult(ids);
     }
 
 }

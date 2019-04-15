@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author youfang
@@ -30,7 +31,7 @@ public class BossServiceImpl implements BossService {
         boss.setId(1);
         boss.setName("小明");
         boss.setAge(23);
-        mongoTemplate.insert(boss);
+        mongoTemplate.insert(boss, UUID.randomUUID().toString());
         return bossMapper.getAllTBoss();
     }
 
