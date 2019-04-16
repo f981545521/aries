@@ -27,6 +27,9 @@
             </list>
         </property>
     </bean>
+    <!-- SnowFlakeWorker -->
+    <bean class="cn.acyou.aries.util.SnowFlakeWorker"/>
+
     <!-- 读取属性文件:db.properties 可以在类中使用：@Value("#{resourceConf.uploadpath}") -->
     <util:properties id="resourceConf" location="classpath:conf/resource.properties" />
     <!-- 配置组件扫描 -->

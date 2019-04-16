@@ -3,6 +3,7 @@ package cn.acyou.aries.controller;
 import cn.acyou.aries.IdListSo;
 import cn.acyou.aries.service.BossService;
 import cn.acyou.aries.util.JsonResult;
+import cn.acyou.aries.util.SnowFlakeWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,15 @@ public class DemoController {
     @Autowired
     private BossService bossService;
 
+    @Autowired
+    private SnowFlakeWorker snowFlakeWorker;
+
     @RequestMapping(value = "/all", method = {RequestMethod.GET})
     @ResponseBody
     public JsonResult all(){
+        for (int i = 0; i < 10; i++) {
+            System.out.println(snowFlakeWorker.nextBizId(2L));
+        }
         return new JsonResult(bossService.getAllBoss());
     }
     @RequestMapping(value = "/delete", method = {RequestMethod.GET, RequestMethod.POST})
