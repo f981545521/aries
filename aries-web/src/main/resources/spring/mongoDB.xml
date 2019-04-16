@@ -27,4 +27,11 @@
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
+
+    <mongo:mapping-converter id="converter" db-factory-ref="mongoDbFactory" base-package="cn.acyou.aries.office"/>
+
+    <mongo:gridFsTemplate id="gridFsTemplcate"
+                          db-factory-ref="mongoDbFactory"
+                          bucket="office"
+                          converter-ref="converter" />
 </beans>
