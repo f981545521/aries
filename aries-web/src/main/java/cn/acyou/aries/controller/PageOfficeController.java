@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -77,25 +79,41 @@ public class PageOfficeController {
         return "word";
     }
 
+    @RequestMapping("/stream")
+    public void stream(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //从MongoDB中查询文件 下载文件
+        GridFSFile fsFile = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("_id").is("5cb56d619245e250606ec1e8")));
+        GridFSBucket bucket = GridFSBuckets.create(mongoDbFactory.getDb(), "office");
+        OutputStream outputStream = response.getOutputStream();
+        bucket.downloadToStream(fsFile.getObjectId(), outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
+
     @RequestMapping("/read")
-    public String readWord(HttpServletRequest request, Map<String, Object> map) throws Exception {
+    public String readWord(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
         PageOfficeCtrl poCtrl = new PageOfficeCtrl(request);
         //设置服务页面
         poCtrl.setServerPage(request.getContextPath() + "/poserver.zz");
         poCtrl.addCustomToolButton("保存", "Save", 1);
         poCtrl.setSaveFilePage("/office/save");
+        /* 方法一：生成并打开临时文件 */
         //从MongoDB中查询文件 下载文件
         GridFSFile fsFile = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("_id").is("5cb56d619245e250606ec1e8")));
-        GridFSBucket bucket = GridFSBuckets.create(mongoDbFactory.getDb(), "office");
-        File file = File.createTempFile("file", "temp.doc");
-        FileOutputStream baos = new FileOutputStream(file);
-        bucket.downloadToStream(fsFile.getObjectId(), baos);
-        poCtrl.webOpen(file.getPath(), OpenModeType.docAdmin, "张三");
+        //GridFSBucket bucket = GridFSBuckets.create(mongoDbFactory.getDb(), "office");
+        //File file = File.createTempFile("file", "temp.doc");
+        //FileOutputStream baos = new FileOutputStream(file);
+        //bucket.downloadToStream(fsFile.getObjectId(), baos);
+        //poCtrl.webOpen(file.getPath(), OpenModeType.docAdmin, "张三");
+        /* 方法二：通过流读取文件 */
+        poCtrl.webOpen("/office/stream", OpenModeType.docAdmin, "张三");
         map.put("pageoffice", poCtrl.getHtmlCode("PageOfficeCtrl1"));
         map.put("objectId", fsFile.getObjectId().toString());
         map.put("fileSubject", fsFile.getFilename());
         return "office/word";
     }
+
+
     @RequestMapping("/update")
     public void update(HttpServletRequest request, HttpServletResponse response) {
         FileSaver fs = new FileSaver(request, response);
