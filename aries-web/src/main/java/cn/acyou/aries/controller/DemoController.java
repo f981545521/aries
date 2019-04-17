@@ -1,6 +1,7 @@
 package cn.acyou.aries.controller;
 
 import cn.acyou.aries.IdListSo;
+import cn.acyou.aries.execption.BusinessException;
 import cn.acyou.aries.service.BossService;
 import cn.acyou.aries.util.JsonResult;
 import cn.acyou.aries.util.SnowFlakeWorker;
@@ -27,9 +28,12 @@ public class DemoController {
 
     @RequestMapping(value = "/all", method = {RequestMethod.GET})
     @ResponseBody
-    public JsonResult all(){
-        for (int i = 0; i < 10; i++) {
-            System.out.println(snowFlakeWorker.nextBizId(2L));
+    public JsonResult all(String id){
+        //for (int i = 0; i < 10; i++) {
+        //    System.out.println(snowFlakeWorker.nextBizId(2L));
+        //}
+        if ("222".equals(id)) {
+            throw new BusinessException("ID不能是222");
         }
         return new JsonResult(bossService.getAllBoss());
     }

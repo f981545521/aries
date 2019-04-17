@@ -22,7 +22,7 @@
 		http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task-3.1.xsd">
     <!-- 配置组件扫描 -->
-    <context:component-scan base-package="cn.acyou.aries.controller"/>
+    <context:component-scan base-package="cn.acyou.aries"/>
     <!-- 增加MVC注解扫描 -->
     <mvc:annotation-driven/>
 
