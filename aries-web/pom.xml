@@ -84,15 +84,5 @@
             <version>1.2</version>
         </dependency>
 
-        <!-- 添加PageOffice依赖（必须） -->
-        <dependency>
-            <groupId>com.zhuozhengsoft</groupId>
-            <artifactId>pageoffice</artifactId>
-            <version>4.5.0.2</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/pageoffice4.5.0.2.jar</systemPath>
-        </dependency>
-
-
     </dependencies>
 </project>

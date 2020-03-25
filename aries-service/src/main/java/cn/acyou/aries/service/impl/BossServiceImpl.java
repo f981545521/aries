@@ -6,11 +6,9 @@ import cn.acyou.aries.execption.BusinessException;
 import cn.acyou.aries.mappers.BossMapper;
 import cn.acyou.aries.service.BossService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author youfang
@@ -22,8 +20,6 @@ public class BossServiceImpl implements BossService {
     @Autowired
     private BossMapper bossMapper;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Override
     public List<Boss> getAllBoss() {
@@ -31,7 +27,6 @@ public class BossServiceImpl implements BossService {
         boss.setId(1);
         boss.setName("小明");
         boss.setAge(23);
-        mongoTemplate.insert(boss, UUID.randomUUID().toString());
         return bossMapper.getAllTBoss();
     }
 
