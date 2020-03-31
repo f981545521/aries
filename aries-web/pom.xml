@@ -18,6 +18,16 @@
             <artifactId>aries-service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>aries-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.acyou</groupId>
+            <artifactId>aries-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!--Spring aop/beans/context/core/expression-->
         <dependency>
